@@ -3,7 +3,12 @@
 
 int yyerror(const char *s);
 int yylex (void);
+
+//#define YYERROR_VERBOSE 1
+extern int yylineno;
 %}
+
+%define parse.error verbose
 
 %token TOK_PRINT TOK_IDENT
 %token TOK_INTEGER TOK_FLOAT
@@ -27,12 +32,18 @@ atribuicao : TOK_IDENT '=' aritmetica
            ;
 
 aritmetica : aritmetica '+' term
+		   | aritmetica '-' term
            | term
 		   ;
 
-term : term '*' factor
-     | factor
+term : term '*' term2
+     | term '/' term2
+     | term2
 	 ;
+
+term2 : term2 '^' factor
+      | factor
+	  ;
 
 factor : '(' aritmetica ')'
        | TOK_IDENT
@@ -44,7 +55,7 @@ factor : '(' aritmetica ')'
 %%
 
 int yyerror(const char *s) {
-	printf("Erro: %s\n", s);
+printf("Erro na linha %d: %s\n", yylineno, s);
 	return 1;
 }
 
