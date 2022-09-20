@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 
+#include "header.h"
+
 int yyerror(const char *s);
 int yylex (void);
 
