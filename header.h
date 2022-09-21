@@ -5,12 +5,17 @@
 
 enum noh_type {PROGRAM,
 	ASSIGN, SUM, MINUS, MULTI,
-	DIVIDE, PRINT, POW};
+	DIVIDE, PRINT, POW,
+	PAREN, STMT, INTEGER, FLOAT,
+	IDENT, GENERIC};
 
 struct noh {
 	int id;
 	enum noh_type type;
 	int childcount;
+
+	double value;
+	char *name;
 
 	struct noh *children[1];
 };
