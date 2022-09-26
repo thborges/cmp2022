@@ -1,6 +1,5 @@
 %{
 #include <stdio.h>
-
 #include "header.h"
 
 int yyerror(const char *s);
@@ -30,6 +29,8 @@ extern int yylineno;
 program : stmts {
 			  noh *program = create_noh(PROGRAM, 1);
 			  program->children[0] = $1;
+
+			  print(program);
 
 			  // chamada da arvore abstrata
 			  // chamada da verificao semântica

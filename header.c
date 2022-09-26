@@ -13,3 +13,22 @@ noh *create_noh(enum noh_type nt, int children) {
 	return newn;
 }
 
+void print(noh *root) {
+	FILE *f = fopen("output.dot", "w");
+	
+	fprintf(f, "graph {\n");
+	print_rec(f, root);
+	fprintf(f, "}\n");
+
+	fclose(f);
+}
+
+void print_rec(FILE *f, noh *root) {
+	fprintf(f, "N%d;\n", root->id);
+	for(int i = 0; i < root->childcount; i++) {
+		print_rec(f, root->children[i]);
+		fprintf(f, "N%d -- N%d;\n",
+			root->id, root->children[i]->id);
+	}
+}
+
