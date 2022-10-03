@@ -39,7 +39,7 @@ program : stmts {
 		  }
         ;
 
-stmts : stmt stmts {
+stmts : stmts stmt {
 	  		$$ = create_noh(STMT, 2);
 			$$->children[0] = $1;
 			$$->children[1] = $2;
@@ -51,8 +51,7 @@ stmts : stmt stmts {
 	  ;
 
 stmt : atribuicao {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
+	  		$$ = $1;
 	   }
      | TOK_PRINT aritmetica {
 	  		$$ = create_noh(PRINT, 1);
@@ -80,8 +79,7 @@ aritmetica : aritmetica '+' term {
 				$$->children[1] = $3;	   
 	   		 }
            | term {
-	  			$$ = create_noh(GENERIC, 1);
-				$$->children[0] = $1;
+		  		$$ = $1;
 	   		 }
 		   ;
 
@@ -96,8 +94,7 @@ term : term '*' term2 {
 			$$->children[1] = $3;	   
 	   }
      | term2 {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
+	  		$$ = $1;
 	   }
 	 ;
 
@@ -107,14 +104,12 @@ term2 : term2 '^' factor {
 			$$->children[1] = $3;
 		}
       | factor {
-	  		$$ = create_noh(GENERIC, 1);
-			$$->children[0] = $1;
+	  		$$ = $1;
 	  	}
 	  ;
 
 factor : '(' aritmetica ')' {
-			$$ = create_noh(PAREN, 1);
-			$$->children[0] = $2;
+			$$ = $2;
 		 }
        | TOK_IDENT {
 	   		$$ = create_noh(IDENT, 0);
