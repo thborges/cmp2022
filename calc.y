@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include <stdlib.h>
 #include "header.h"
 
 int yyerror(const char *s);
@@ -40,9 +41,13 @@ program : stmts {
         ;
 
 stmts : stmts stmt {
-	  		$$ = create_noh(STMT, 2);
-			$$->children[0] = $1;
-			$$->children[1] = $2;
+			noh *n = $1;
+			n = (noh*)realloc(n,
+				sizeof(noh) +
+				sizeof(noh*) * n->childcount);
+			n->children[n->childcount] = $2;
+			n->childcount++;
+			$$ = n;
 		}
       | stmt {
 	  		$$ = create_noh(STMT, 1);
