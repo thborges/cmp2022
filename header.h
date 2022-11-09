@@ -2,6 +2,8 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
 
 enum noh_type {PROGRAM,
 	ASSIGN, SUM, MINUS, MULTI,
@@ -21,6 +23,17 @@ typedef struct {
 	char *ident;
 } token_args;
 
+typedef struct {
+	char *nome;
+	int token;
+	bool exists;
+} simbolo;
+static int simbolo_qtd = 0;
+static simbolo tsimbolos[100];
+simbolo *simbolo_novo(char *nome, int token);
+bool simbolo_existe(char *nome);
+void debug();
+
 struct noh {
 	int id;
 	enum noh_type type;
@@ -34,6 +47,15 @@ struct noh {
 	struct noh *children[1];
 };
 typedef struct noh noh;
+
+typedef void (*visitor_action)(noh **root,
+	noh *no);
+
+void check_declared_vars(noh **root,
+	noh *no);
+
+void visitor_leaf_first(noh **root,
+	visitor_action act);
 
 noh *create_noh(enum noh_type, int children);
 
