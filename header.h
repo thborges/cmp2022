@@ -28,6 +28,8 @@ typedef struct {
 	int token;
 	bool exists;
 } simbolo;
+
+static int error_count = 0;
 static int simbolo_qtd = 0;
 static simbolo tsimbolos[100];
 simbolo *simbolo_novo(char *nome, int token);

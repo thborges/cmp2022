@@ -52,8 +52,9 @@ void print_rec(FILE *f, noh *root) {
 int search_symbol(char *nome) {
 	// busca linear, não eficiente
 	for(int i = 0; i < simbolo_qtd; i++) {
-		if (strcmp(tsimbolos[i].nome, nome) == 0)
+		if (strcmp(tsimbolos[i].nome, nome) == 0) {
 			return i;
+		}
 	}
 	return -1;
 }
@@ -68,6 +69,17 @@ void check_declared_vars(noh **root,
 		if (s != -1)
 			tsimbolos[s].exists = true;
 	}
+	else if (no->type == IDENT) {
+		if (nr->type == ASSIGN && no == nr->children[0])
+			return;
+
+		int s = search_symbol(no->name);
+		if (s == -1 || !tsimbolos[s].exists) {
+			printf("%d: erro: símbolo %s não declarado.\n",
+				0, no->name);
+			error_count++;
+		}
+	}
 }
 
 void visitor_leaf_first(noh **root,
@@ -80,4 +92,30 @@ void visitor_leaf_first(noh **root,
 			act(root, r->children[i]);
 	}
 }
+
+simbolo *simbolo_novo(char *nome, int token) {
+	tsimbolos[simbolo_qtd].nome = nome;
+	tsimbolos[simbolo_qtd].token = token;
+	tsimbolos[simbolo_qtd].exists = false;
+	simbolo *result = &tsimbolos[simbolo_qtd];
+	simbolo_qtd++;
+	return result;
+}
+
+bool simbolo_existe(char *nome) {
+	// busca linear, não eficiente
+	for(int i = 0; i < simbolo_qtd; i++) {
+		if (strcmp(tsimbolos[i].nome, nome) == 0)
+			return true;
+	}
+	return false;
+}
+
+void debug() {
+	printf("Simbolos:\n");
+	for(int i = 0; i < simbolo_qtd; i++) {
+		printf("\t%s\n", tsimbolos[i].nome);
+	}
+}
+
 
