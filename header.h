@@ -36,8 +36,12 @@ simbolo *simbolo_novo(char *nome, int token);
 bool simbolo_existe(char *nome);
 void debug();
 
+extern int yylineno;
+
 struct noh {
 	int id;
+	int lineno;
+
 	enum noh_type type;
 	int childcount;
 

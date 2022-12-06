@@ -10,6 +10,7 @@ noh *create_noh(enum noh_type nt, int children) {
 	newn->type = nt;
 	newn->childcount = children;
 	newn->id = IDCOUNT++;
+	newn->lineno = yylineno;
 	return newn;
 }
 
@@ -76,7 +77,7 @@ void check_declared_vars(noh **root,
 		int s = search_symbol(no->name);
 		if (s == -1 || !tsimbolos[s].exists) {
 			printf("%d: erro: símbolo %s não declarado.\n",
-				0, no->name);
+				no->lineno, no->name);
 			error_count++;
 		}
 	}
